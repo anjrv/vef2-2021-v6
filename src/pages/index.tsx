@@ -43,14 +43,14 @@ const query = `
       episodeID
       characterConnection {
         characters {
-          name
-          id
+          ...character
         }
       }
     }
   }
 }
-  `;
+${characterFragment}
+`;
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
   const films = await fetchSwapi<any>(query); // TODO EKKI any

@@ -1,6 +1,11 @@
 export interface ICharacter {
   id: string;
   name?: string;
+  birthYear?: string;
+  eyeColor?: string;
+  hairColor: string;
+  height: number;
+  mass: number;
 }
 
 interface ICharacterConnection {
