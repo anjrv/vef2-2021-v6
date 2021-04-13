@@ -28,25 +28,36 @@ export default function PageComponent(
       </Head>
       <h1>Star Wars films</h1>
       {films.map((film, i) => (
-        <Film key={i} />
+        <Film key={i} film={film} />
       ))}
     </Layout>
   );
 }
 
 const query = `
-  {
-    # TODO sækja gögn um myndir
+{
+ allFilms {
+  films {
+      title
+      openingCrawl
+      episodeID
+      characterConnection {
+        characters {
+          name
+          id
+        }
+      }
+    }
   }
-  ${characterFragment}
-`;
+}
+  `;
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
   const films = await fetchSwapi<any>(query); // TODO EKKI any
 
   return {
     props: {
-      films,
+      films: films?.allFilms?.films ?? null,
     },
   };
 };
