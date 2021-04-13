@@ -25,7 +25,7 @@ export function Film({ film }: Props): JSX.Element {
               <Link
                 key={character.id}
                 href={`/characters/${character.id}`}
-              > {character.name}
+              >{character.name}
               </Link>
             ))}
           </div>
