@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 
@@ -7,6 +7,7 @@ import { Button } from '../button/Button';
 import { ICharacter } from '../../types';
 
 type Props = {
+  peopleResponse: any;
 };
 
 /**
@@ -24,7 +25,7 @@ type Props = {
  */
 type ExcludesFalse = <T>(x: T | null | undefined | false) => x is T;
 
-export function Characters({ }: Props): JSX.Element {
+export function Characters({ peopleResponse }: Props): JSX.Element {
   // TODO meðhöndla loading state, ekki þarf sérstaklega að villu state
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -37,6 +38,16 @@ export function Characters({ }: Props): JSX.Element {
     // TODO sækja gögn frá /pages/api/characters.ts (gegnum /api/characters), ef það eru fleiri
     // (sjá pageInfo.hasNextPage) með cursor úr pageInfo.endCursor
   };
+
+  useEffect(() => {
+    async function showData() {
+      const res = peopleResponse;
+
+      setCharacters(res.people);
+      setNextPage(res.pageInfo.endCursor);
+    }
+    showData();
+  }, [peopleResponse]);
 
   return (
     <section className={s.characters}>

@@ -21,9 +21,9 @@ export function Film({ film }: Props): JSX.Element {
         <div className={s.film__characters}>
           <h3 className={s.film__charactersheader}>Characters</h3>
           <div>
-            {film.characterConnection.characters.map((character) => (
+            {film.characterConnection.characters.map((character, i) => (
               <Link
-                key={character.id}
+                key={i}
                 href={`/characters/${character.id}`}
               >{character.name}
               </Link>
