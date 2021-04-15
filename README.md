@@ -1,5 +1,16 @@
 # Vefforritun 2, 2021, verkefni 6
 
+[Heroku](https://anjrv-vef2-2021-v6.herokuapp.com/).
+
+### Unnin af: Jaan Jaerving // JAJ20
+
+Keyrt með:
+* `npm install` Til að sækja öll dependencies
+* `npm run dev` Til að keyra developer umhverfi
+* `npm run lint` Keyrir eslint
+
+# Verkefnislýsing
+
 [Kynning á verkefni](https://youtu.be/).
 
 Tengjast skal SWAPI GraphQL endapunkt og birta upplýsingar um Star Wars myndir (fyrstu sex) ásamt karakterum í þeim.
