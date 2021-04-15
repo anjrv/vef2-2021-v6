@@ -22,11 +22,14 @@ export function Film({ film }: Props): JSX.Element {
           <h3 className={s.film__charactersheader}>Characters</h3>
           <div>
             {film.characterConnection.characters.map((character, i) => (
+              character
+              && (
               <Link
                 key={i}
                 href={`/characters/${character.id}`}
               >{character.name}
               </Link>
+              )
             ))}
           </div>
         </div>

@@ -6,10 +6,10 @@ import { Film } from '../components/film/Film';
 import { Layout } from '../components/layout/Layout';
 import { characterFragment } from '../graphql/characterFragment';
 import { fetchSwapi } from '../lib/swapi';
-import { IFilm } from '../types';
+import { IFilms } from '../types';
 
 export type PageProps = {
-  films: Array<IFilm> | null;
+  films: IFilms | null;
 };
 
 export default function PageComponent(
@@ -27,7 +27,7 @@ export default function PageComponent(
         <title>Star Wars films</title>
       </Head>
       <h1>Star Wars films</h1>
-      {films.map((film, i) => (
+      {films.allFilms.films.map((film, i) => (
         <Film key={i} film={film} />
       ))}
     </Layout>
@@ -53,11 +53,11 @@ ${characterFragment}
 `;
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
-  const films = await fetchSwapi<any>(query); // TODO EKKI any
+  const films = await fetchSwapi<IFilms>(query);
 
   return {
     props: {
-      films: films?.allFilms?.films ?? null,
+      films: films ?? null,
     },
   };
 };

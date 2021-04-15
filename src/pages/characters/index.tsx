@@ -7,7 +7,7 @@ import { fetchCharacters } from '../../lib/swapi';
 import { IPeopleResponse } from '../../types';
 
 export type PageProps = {
-  peopleResponse: any; // TODO EKKI any
+  peopleResponse: IPeopleResponse;
 };
 
 export default function PageComponent(
@@ -26,11 +26,11 @@ export default function PageComponent(
 }
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
-  const peopleResponse = await fetchCharacters<any>('');
+  const peopleResponse = await fetchCharacters('');
 
   return {
     props: {
-      peopleResponse: peopleResponse?.allPeople ?? null,
+      peopleResponse: peopleResponse ?? null,
     },
   };
 };

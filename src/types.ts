@@ -3,13 +3,17 @@ export interface ICharacter {
   name?: string;
   birthYear?: string;
   eyeColor?: string;
-  hairColor: string;
-  height: number;
-  mass: number;
+  hairColor?: string;
+  height?: number;
+  mass?: number;
+}
+
+export interface ICharacterSearch {
+  person: ICharacter;
 }
 
 interface ICharacterConnection {
-  characters: ICharacter[];
+  characters: Array<ICharacter>;
 }
 
 export interface IFilm {
@@ -17,4 +21,25 @@ export interface IFilm {
   episodeID: number;
   openingCrawl: string;
   characterConnection: ICharacterConnection;
+}
+
+interface IAllFilms {
+  films: Array<IFilm>;
+}
+export interface IFilms {
+  allFilms: IAllFilms;
+}
+
+interface IPageInfo {
+  endCursor: string;
+  hasNextPage: boolean;
+}
+
+interface IAllPeople {
+  people: Array<ICharacter>;
+  pageInfo: IPageInfo;
+}
+
+export interface IPeopleResponse {
+  allPeople: IAllPeople;
 }

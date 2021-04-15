@@ -1,53 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Link from 'next/link';
 
 import s from './Characters.module.scss';
 import { Button } from '../button/Button';
-import { ICharacter } from '../../types';
+import { ICharacter, IPeopleResponse } from '../../types';
 
 type Props = {
-  peopleResponse: any;
+  peopleResponse: IPeopleResponse;
 };
 
-/**
- * Hjálpar týpa ef við erum að filtera burt hugsanleg null gildi:
- *
- * const items: T = itemsWithPossiblyNull
- *  .map((item) => {
- *    if (!item) {
- *      return null;
- *    }
- *    return item;
- *  })
- *  .filter((Boolean as unknown) as ExcludesFalse);
- * items verður Array<T> en ekki Array<T | null>
- */
 type ExcludesFalse = <T>(x: T | null | undefined | false) => x is T;
 
 export function Characters({ peopleResponse }: Props): JSX.Element {
-  // TODO meðhöndla loading state, ekki þarf sérstaklega að villu state
   const [loading, setLoading] = useState<boolean>(false);
-
-  // TODO setja grunngögn sem koma frá server
-  const [characters, setCharacters] = useState<Array<ICharacter>>([]);
-
-  const [nextPage, setNextPage] = useState<string | null>(null);
+  const [characters, setCharacters] = useState<Array<ICharacter>>(peopleResponse.allPeople.people);
+  const [hasNext, setNext] = useState<boolean>(peopleResponse.allPeople.pageInfo.hasNextPage);
+  const [nextPage, setNextPage] = useState<string | null>(
+    peopleResponse.allPeople.pageInfo.endCursor,
+  );
 
   const fetchMore = async (): Promise<void> => {
-    // TODO sækja gögn frá /pages/api/characters.ts (gegnum /api/characters), ef það eru fleiri
-    // (sjá pageInfo.hasNextPage) með cursor úr pageInfo.endCursor
+    setLoading(true);
+
+    const res = await fetch(`/api/characters?after=${nextPage}`);
+    const data = await res.json();
+
+    setCharacters(characters.concat(data.allPeople.people));
+    setNextPage(data.allPeople.pageInfo.endCursor);
+    setNext(data.allPeople.pageInfo.hasNextPage);
+
+    setLoading(false);
   };
 
-  useEffect(() => {
-    async function showData() {
-      const res = peopleResponse;
-
-      setCharacters(res.people);
-      setNextPage(res.pageInfo.endCursor);
+  characters.map((character) => {
+    if (!character) {
+      return null;
     }
-    showData();
-  }, [peopleResponse]);
+    return character;
+  }).filter((Boolean as unknown) as ExcludesFalse);
 
   return (
     <section className={s.characters}>
@@ -58,8 +49,8 @@ export function Characters({ peopleResponse }: Props): JSX.Element {
           </li>
         ))}
       </ul>
-
-      <Button disabled={loading} onClick={fetchMore}>Fetch more</Button>
+      {loading && <p className={s.characters__loading}>Fetching more characters...</p>}
+      {hasNext && <Button disabled={loading} onClick={fetchMore}>Fetch more</Button>}
     </section>
   );
 }
